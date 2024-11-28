@@ -6,12 +6,14 @@ import About from './components/About';
 import Contacto from './components/Contacto';
 import Footer from "./components/Footer";
 import Reseñas from "./components/Reseñas";
+import Login from "./components/Login";
 import "./style.css";
 
 function App() {
   return (
     <Router>
       <div className='App'>
+        <Login />
         <nav>
           <ul className="nav-list">
             <li><Link to="/">Inicio</Link></li>
