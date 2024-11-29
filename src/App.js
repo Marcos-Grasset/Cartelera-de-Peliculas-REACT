@@ -8,7 +8,7 @@ import Contacto from './components/Contacto';
 import Footer from "./components/Footer";
 import Reseñas from "./components/Reseñas";
 import Login from "./components/Login";
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 import "./style.css";
 
 function App() {
@@ -23,6 +23,16 @@ function App() {
 
     return () => unsubscribe(); // Limpia el listener al desmontar
   }, []);
+
+  const handleLogout = async () => {
+    const auth = getAuth();
+    try {
+      await signOut(auth);
+      setUser(null); // Actualizar el estado a null
+    } catch (error) {
+      console.error("Error al cerrar sesión:", error);
+    }
+  };
 
   // Si no está autenticado, redirigir a la pantalla de Login
   if (!user) {
@@ -45,6 +55,11 @@ function App() {
             <li><Link to="/Reseñas">Reseñas</Link></li>
             <li><Link to="/About">Acerca de</Link></li>
             <li><Link to="/Contacto">Contacto</Link></li>
+            <li>
+              <button className="logout-button" onClick={handleLogout}>
+                Cerrar sesión
+              </button>
+            </li>
           </ul>
         </nav>
 
