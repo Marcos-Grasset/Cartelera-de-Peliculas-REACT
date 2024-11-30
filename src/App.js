@@ -41,6 +41,7 @@ function App() {
         <Routes>
           <Route path="*" element={<Login />} />
         </Routes>
+        <Footer />
       </Router>
     );
   }

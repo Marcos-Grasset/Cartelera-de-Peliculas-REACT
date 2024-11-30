@@ -7,7 +7,7 @@ function Header() {
     return (
     <header>
         <h1>
-        <img src={headerGif} alt="Descripción de la imagen" className="header-img" />
+        <img src={headerGif} alt="Cartelera de Películas" className="header-img" />
         </h1>
     </header>
     );

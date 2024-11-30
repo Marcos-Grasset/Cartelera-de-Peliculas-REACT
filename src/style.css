@@ -231,7 +231,7 @@ h2 {
   background-size: cover;
   background-position: center;
   padding: 20px;
-  
+
 }
 
 .estrellas {
@@ -477,30 +477,35 @@ footer {
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background-color: #f9f9f9;
+  background-image: url('./images/fondo.jpg'); /* Cambia la ruta según la ubicación de tu imagen */
+  background-size: cover; /* Escala la imagen para que cubra todo el fondo */
+  background-position: center; /* Centra la imagen */
+  background-repeat: no-repeat; /* Evita que la imagen se repita */
 }
 
 .login-container h2 {
   margin-bottom: 20px;
-  color: #333;
+  color: #ffffff;
 }
 
 .login-container button {
-  background-color: #4285F4;
+  background-color: #c41bd3;
   color: white;
   border: none;
   padding: 10px 20px;
   border-radius: 5px;
   font-size: 16px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Sombreado del texto */
+  font-weight: bold; /* Hace el texto en negrita */
   cursor: pointer;
 }
 
 .login-container button:hover {
-  background-color: #357ae8;
+  background-color: #ff7e06;
 }
 
 .logout-button {
-  background-color: #007bff;
+  background-color: #c41bd3;
   color: white;
   border: none;
   padding: 10px 15px;
@@ -510,7 +515,20 @@ footer {
 }
 
 .logout-button:hover {
-  background-color: #0056b3;
+  background-color: #ff7e06;
+}
+
+.login-container p {
+  font-size: 1.1rem; /* Tamaño de letra */
+  color: #ffffff; /* Color blanco */
+  font-family: 'Cursive', sans-serif; /* Fuente informal */
+  text-align: center; /* Centra el texto */
+  line-height: 1.8; /* Espaciado entre líneas */
+  margin: 20px 10px; /* Márgenes para separar del resto */
+  max-width: 800px; /* Ancho máximo */
+  word-wrap: break-word; /* Ajusta el texto dentro del ancho */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Sombreado del texto */
+  font-weight: bold; /* Hace el texto en negrita */
 }
 
 @keyframes fadeIn {
