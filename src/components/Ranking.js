@@ -1,142 +1,106 @@
 import React, { useEffect, useState } from "react";
-import rankingGif from '../images/Ranking de Películas.gif';
-import '../style.css';
+import rankingGif from "../images/Ranking de Películas.gif";
+import { collection, query, where, getDocs, updateDoc, doc, deleteDoc, setDoc } from "firebase/firestore";
+import { db, auth } from "./firebase";
+import "../style.css";
 
 function Ranking() {
     const [ranking, setRanking] = useState([]);
+    const user = auth.currentUser; // Obtener el usuario autenticado
 
     useEffect(() => {
-        // localStorage.clear(); // Esto borra todo el `localStorage`
-        if (!localStorage.getItem("reseñas")) {
-            const reseñasEjemplo = [
-                { pelicula: "Guason 2 Folie a Deux", estrellas: 0, comentario: "No hay reseña disponible." },
-                { pelicula: "Transformers UNO", estrellas: 0, comentario: "No hay reseña disponible." },
-                { pelicula: "Alien Romulus", estrellas: 0, comentario: "No hay reseña disponible." },
-                { pelicula: "Beetlejuice", estrellas: 0, comentario: "No hay reseña disponible." },
-                { pelicula: "Intensa Mente 2", estrellas: 0, comentario: "No hay reseña disponible." },
-                { pelicula: "Sonríe 2", estrellas: 0, comentario: "No hay reseña disponible." },
-                { pelicula: "Deadpool & Wolverine", estrellas: 0, comentario: "No hay reseña disponible." },
-                { pelicula: "Alice", estrellas: 0, comentario: "No hay reseña disponible." },
-                { pelicula: "Carnada", estrellas: 0, comentario: "No hay reseña disponible." },
-                { pelicula: "Deep Web", estrellas: 0, comentario: "No hay reseña disponible." },
-                { pelicula: "Hellboy", estrellas: 0, comentario: "No hay reseña disponible." },
-                { pelicula: "Mi Villano Favorito 4", estrellas: 0, comentario: "No hay reseña disponible." },
-            ];
-            localStorage.setItem("reseñas", JSON.stringify(reseñasEjemplo));
+        if (user) {
+            cargarReseñas();
         }
+    }, [user]);
 
-        actualizarRanking();
-    }, []);
+    const cargarReseñas = async () => {
+        try {
+            const q = query(collection(db, "reseñas"), where("usuario", "==", user.email));
+            const querySnapshot = await getDocs(q);
+            const reseñas = [];
 
-    const actualizarRanking = () => {
-        const reseñas = JSON.parse(localStorage.getItem("reseñas")) || [];
-        if (reseñas.length === 0) {
-            setRanking([]);
-            return;
+            querySnapshot.forEach((doc) => {
+                reseñas.push({ id: doc.id, ...doc.data() });
+            });
+
+            setRanking(reseñas);
+        } catch (error) {
+            console.error("Error al cargar las reseñas:", error);
         }
-
-        const puntuaciones = {};
-        reseñas.forEach((reseña) => {
-            if (!puntuaciones[reseña.pelicula]) {
-                puntuaciones[reseña.pelicula] = { total: 0, count: 0, comentario: reseña.comentario };
-            }
-            puntuaciones[reseña.pelicula].total += reseña.estrellas;
-            puntuaciones[reseña.pelicula].count++;
-        });
-
-        const sortedMovies = Object.keys(puntuaciones).sort((a, b) => 
-            (puntuaciones[b].total / puntuaciones[b].count) - (puntuaciones[a].total / puntuaciones[a].count)
-        );
-
-        setRanking(
-            sortedMovies.map(movie => ({
-                name: movie,
-                avgStars: Math.round(puntuaciones[movie].total / puntuaciones[movie].count),
-                comentario: puntuaciones[movie].comentario
-            }))
-        );
     };
 
-    function editarReseña(pelicula) {
-        const reseñas = JSON.parse(localStorage.getItem('reseñas')) || [];
-        const reseña = reseñas.find(r => r.pelicula === pelicula);
-        if (reseña) {
-            const nuevoComentario = prompt('Editar comentario:', reseña.comentario);
-            const nuevasEstrellas = parseInt(prompt('Editar estrellas (1-5):', reseña.estrellas), 10);
+    const editarReseña = async (id) => {
+        const nuevaEstrella = parseInt(prompt("Editar estrellas (1-5):"), 10);
+        const nuevoComentario = prompt("Editar comentario:");
 
-            if (nuevoComentario && !isNaN(nuevasEstrellas) && nuevasEstrellas >= 1 && nuevasEstrellas <= 5) {
-                reseña.comentario = nuevoComentario;
-                reseña.estrellas = nuevasEstrellas;
+        if (!isNaN(nuevaEstrella) && nuevaEstrella >= 1 && nuevaEstrella <= 5 && nuevoComentario) {
+            const reseñaRef = doc(db, "reseñas", id);
 
-                localStorage.setItem('reseñas', JSON.stringify(reseñas));
-                alert('Reseña actualizada');
-                actualizarRanking();
-                
-                // Notificar cambios en localStorage
-                window.dispatchEvent(new Event("storage"));
-            } else {
-                alert('Número inválido. Asegúrate de ingresar una puntuación entre 1 y 5.');
-            }
+            await updateDoc(reseñaRef, {
+                estrellas: nuevaEstrella,
+                comentario: nuevoComentario,
+            });
+
+            alert("Reseña actualizada.");
+            cargarReseñas();
         } else {
-            alert('Reseña no encontrada.');
+            alert("Entrada inválida.");
         }
-    }
+    };
 
-    function eliminarReseña(pelicula) {
-        let reseñas = JSON.parse(localStorage.getItem('reseñas')) || [];
-        const reseñaIndex = reseñas.findIndex(r => r.pelicula === pelicula);
+    const eliminarReseña = async (id) => {
+        const reseñaRef = doc(db, "reseñas", id);
+        await deleteDoc(reseñaRef);
+        alert("Reseña eliminada.");
+        cargarReseñas();
+    };
 
-        if (reseñaIndex !== -1) {
-            reseñas.splice(reseñaIndex, 1);
-            localStorage.setItem('reseñas', JSON.stringify(reseñas));
+    const agregarReseña = async (pelicula) => {
+        const nuevaEstrella = parseInt(prompt("Estrellas (1-5):"), 10);
+        const nuevoComentario = prompt("Comentario:");
 
-            alert('Reseña eliminada.');
-            actualizarRanking();
+        if (!isNaN(nuevaEstrella) && nuevaEstrella >= 1 && nuevaEstrella <= 5 && nuevoComentario) {
+            const reseñaRef = doc(db, "reseñas", `${user.email}_${pelicula}`);
 
-            // Notificar cambios en localStorage
-            window.dispatchEvent(new Event("storage"));
+            await setDoc(reseñaRef, {
+                usuario: user.email,
+                pelicula,
+                estrellas: nuevaEstrella,
+                comentario: nuevoComentario,
+            });
+
+            alert("Reseña guardada.");
+            cargarReseñas();
         } else {
-            alert('Reseña no encontrada.');
+            alert("Entrada inválida.");
         }
-    }
+    };
 
     return (
         <section id="ranking">
             <h2>
-                <img
-                    src={rankingGif}
-                    alt="Gif de ranking"
-                    className="gif-header"
-                />
+                <img src={rankingGif} alt="Gif de ranking" className="gif-header" />
             </h2>
             <div className="ranking-container">
                 {ranking.length > 0 ? (
                     <div className="ranking-card">
-                        {ranking.map((pelicula, index) => (
-                            <div key={index} className="ranking-item">
+                        {ranking.map((reseña) => (
+                            <div key={reseña.id} className="ranking-item">
                                 <div>
-                                    <strong>{pelicula.name}</strong>:{" "}
+                                    <strong>{reseña.pelicula}</strong>:{" "}
                                     {[...Array(5)].map((_, i) => (
-                                        <span
-                                            key={i}
-                                            style={{ color: i < pelicula.avgStars ? "gold" : "black" }}
-                                        >
+                                        <span key={i} style={{ color: i < reseña.estrellas ? "gold" : "black" }}>
                                             ★
                                         </span>
                                     ))}
-                                    <p>{pelicula.comentario}</p>
+                                    <p>{reseña.comentario}</p>
                                 </div>
                                 <div>
-                                    <button
-                                        className="button-editar"
-                                        onClick={() => editarReseña(pelicula.name)}
-                                    >
+                                    <button className="button-editar" onClick={() => editarReseña(reseña.id)}>
                                         Editar
                                     </button>
-                                    <button
-                                        className="button-eliminar"
-                                        onClick={() => eliminarReseña(pelicula.name)}
-                                    >
+                                    <button className="button-eliminar" onClick={() => eliminarReseña(reseña.id)}>
                                         Eliminar
                                     </button>
                                 </div>
@@ -147,6 +111,10 @@ function Ranking() {
                     <p>No hay películas en el ranking.</p>
                 )}
             </div>
+            <button className="boton-agregar" onClick={() => agregarReseña(prompt("Nombre de la película:"))}>
+            Agregar Reseña
+            </button>
+
         </section>
     );
 }

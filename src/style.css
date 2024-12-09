@@ -531,6 +531,22 @@ footer {
   font-weight: bold; /* Hace el texto en negrita */
 }
 
+.boton-agregar {
+  background-color: #34b46a; /* Azul */
+  color: #fff; /* Texto blanco */
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 20px; /* Espacio arriba del botón */
+}
+
+.boton-agregar:hover {
+  background-color: #2cec7c;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;

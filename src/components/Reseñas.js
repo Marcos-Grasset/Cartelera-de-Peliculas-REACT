@@ -1,21 +1,41 @@
 import React, { useState, useEffect } from "react";
+import { getFirestore, collection, getDocs } from "firebase/firestore";
+import { getAuth } from "firebase/auth"; // Importamos Auth para obtener el usuario actual
 import reseñaspeliGif from "../images/ResenasPeli.gif";
 import "../style.css";
+import { db } from './firebase';
 
 function Reseñas() {
   const [reseñas, setReseñas] = useState([]);
 
-  const cargarReseñas = () => {
-    const reseñasGuardadas = JSON.parse(localStorage.getItem("reseñas")) || [];
-    setReseñas(reseñasGuardadas);
+  // Cargar reseñas solo del usuario actual
+  const cargarReseñas = async () => {
+    try {
+      const auth = getAuth();
+      const user = auth.currentUser; // Obtener el usuario autenticado
+
+      if (!user) {
+        console.error("No hay un usuario autenticado.");
+        return;
+      }
+
+      // Obtener las reseñas desde Firestore
+      const reseñasRef = collection(db, "reseñas");
+      const snapshot = await getDocs(reseñasRef);
+
+      // Filtrar solo las reseñas del usuario actual
+      const reseñasUsuario = snapshot.docs
+        .map(doc => doc.data())
+        .filter(reseña => reseña.usuario === user.email); // Filtra por email
+
+      setReseñas(reseñasUsuario);
+    } catch (error) {
+      console.error("Error al cargar las reseñas desde Firestore:", error);
+    }
   };
 
   useEffect(() => {
-    cargarReseñas();
-
-    // Escuchar cambios en localStorage cuando otro componente actualice las reseñas
-    window.addEventListener("storage", cargarReseñas);
-    return () => window.removeEventListener("storage", cargarReseñas);
+    cargarReseñas(); // Cargar reseñas al montar el componente
   }, []);
 
   return (
@@ -32,22 +52,13 @@ function Reseñas() {
 
       <main id="main_reseñas">
         {reseñas.length === 0 ? (
-          <p>No hay reseñas disponibles. ¡Añade una reseña!</p>
+          <p>No hay reseñas disponibles para tu cuenta. ¡Añade una reseña!</p>
         ) : (
           reseñas.map((reseña, index) => (
             <div key={index} className="reseña-card">
               <h2>{reseña.pelicula}</h2>
 
-              {/* Muestra la imagen de la película */}
-              {reseña.imagen && (
-                <img
-                  src={reseña.imagen}
-                  alt={`Imagen de ${reseña.pelicula}`}
-                  className="pelicula-imagen"
-                  style={{ width: 200, height: "auto", marginBottom: 10 }}
-                />
-              )}
-
+              {/* Mostrar estrellas */}
               <div id="estrellas">
                 {[...Array(5)].map((_, i) => (
                   <span
@@ -62,6 +73,7 @@ function Reseñas() {
                 ))}
               </div>
 
+              {/* Mostrar comentario */}
               <div className="comentario-container">
                 <strong className="comentario-label">Comentario:</strong>
                 <textarea
