@@ -547,6 +547,114 @@ footer {
   background-color: #2cec7c;
 }
 
+/* Fondo oscuro del modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Contenido del modal */
+.modal-content {
+  background: #c41bd3;
+  padding: 20px;
+  border: 5px solid #7a166a; /* Marco violeta oscuro */
+  border-radius: 8px;
+  width: 350px;
+  max-width: 80%;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Área de comentario personalizada */
+.modal-textarea {
+  width: 100%;
+  height: 100px; /* Caja de comentario más grande */
+  background: #4b0082; /* Violeta oscuro */
+  color: #fff; /* Letras blancas */
+  border: 1px solid #4b0082; /* Borde violeta oscuro */
+  border-radius: 5px;
+  padding: 8px;
+  font-size: 14px;
+  resize: none; /* Evitar que se redimensione */
+  margin-top: 10px;
+}
+
+.textarea-comentario {
+  width: 70%; /* Ajusta aquí: puede ser 300px, 50%, etc. */
+  background-color: #4b0082;
+  color: white;
+  border: 2px solid #7a166a;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 16px;
+  resize: none;
+  margin: 0 auto; /* Centra el textarea si tiene menos ancho */
+}
+
+/* Botones del modal */
+.modal-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.button-cancel,
+.button-confirm {
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background 0.3s ease;
+}
+
+/* Estilo para el botón Cancelar */
+.button-cancel {
+  background: #ca0808; /* Rojo */
+  color: #fff; /* Letras blancas */
+}
+
+.button-cancel:hover {
+  background: #ff0019; /* Rojo más oscuro */
+}
+
+/* Estilo para el botón Guardar */
+.button-confirm {
+  background: #28a745; /* Verde */
+  color: #fff; /* Letras blancas */
+}
+
+.button-confirm:hover {
+  background: #1bc23f; /* Verde más oscuro */
+}
+
+/* Estilos para las estrellas */
+#estrellas {
+  margin-bottom: 20px; /* Separación entre las estrellas y el comentario */
+}
+
+.estrella {
+  font-size: 30px; /* Aumentar el tamaño de las estrellas */
+  margin-right: 5px; /* Espacio entre las estrellas */
+  cursor: pointer;
+}
+
+/* Estilos para el texto del modal */
+.modal h2 {
+  font-size: 24px; /* Tamaño grande para el texto del modal */
+  color: yellow; /* Color amarillo para "Editar reseña" */
+  margin-bottom: 15px; /* Espacio debajo del título */
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
