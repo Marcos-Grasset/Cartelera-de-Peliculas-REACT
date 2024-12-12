@@ -35,13 +35,15 @@ const Login = () => {
 
     return (
         <div className="login-container">
-            <img src={headerGif} alt="Cartelera de Películas" className="header-img" />
-            <p>¡Bienvenido a nuestra comunidad cinéfila! Aquí podrás explorar, compartir y sumergirte en el apasionante mundo de las reseñas de cine. Descubre películas que te emocionen, analiza los clásicos que han marcado generaciones y da tu opinión sobre los últimos estrenos. Únete a nosotros para vivir la magia del séptimo arte desde una perspectiva única. ¿Estás listo para embarcarte en esta aventura cinematográfica?</p>
-            {!user ? (
-                <button onClick={handleSignIn}>Iniciar sesión con Google</button> // Muestra el botón si el usuario no está logueado
-            ) : (
-                <p>¡Bienvenido, {user.displayName}!</p> // Muestra el nombre del usuario si está logueado
-            )}
+            <div className="login-box">
+                <img src={headerGif} alt="Cartelera de Películas" className="header-img" />
+                <p>¡Bienvenido a nuestra comunidad cinéfila! Aquí podrás explorar, compartir y sumergirte en el apasionante mundo de las reseñas de cine. Descubre películas que te emocionen, analiza los clásicos que han marcado generaciones y da tu opinión sobre los últimos estrenos. Únete a nosotros para vivir la magia del séptimo arte desde una perspectiva única. ¿Estás listo para embarcarte en esta aventura cinematográfica?</p>
+                {!user ? (
+                    <button onClick={handleSignIn} className="login-btn">Iniciar sesión con Google</button> // Muestra el botón si el usuario no está logueado
+                ) : (
+                    <p>¡Bienvenido, {user.displayName}!</p> // Muestra el nombre del usuario si está logueado
+                )}
+            </div>
         </div>
     );
 };

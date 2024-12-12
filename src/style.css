@@ -471,34 +471,88 @@ footer {
   color: white;
 }
 
+
+/* Estilo para el contenedor principal */
 .login-container {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-size:cover;
+  background-position: center;
+  background-image: url("./images/fondo.jpg");
+  background-repeat: no-repeat;
+  padding: 75px;
+}
+
+/* Estilo para el rectángulo donde estará el contenido */
+.login-box {
+  background-color: #131313b2; /* Fondo blanco del rectángulo */
+  padding: 50px;
+  border-radius: 20px; /* Bordes redondeados */
+  width: 30%; /* Ancho del rectángulo */
+  max-width: 600px; /* Ancho máximo */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra para el rectángulo */
+  text-align: center;
+}
+
+/* Estilo de la imagen */
+.header-img {
+  width: 100%;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+/* Estilo para el botón de inicio de sesión */
+.login-btn {
+  background-color: #c41bd3;
+  color: white;
+  border: none;
+  padding: 10px 10px;
+  border-radius: 5px;
+  font-size: 10px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
   align-items: center;
   justify-content: center;
-  height: 100vh;
-  background-image: url('./images/fondo.jpg'); /* Cambia la ruta según la ubicación de tu imagen */
-  background-size: cover; /* Escala la imagen para que cubra todo el fondo */
-  background-position: center; /* Centra la imagen */
-  background-repeat: no-repeat; /* Evita que la imagen se repita */
+  gap: 15px; /* Espaciado entre el icono y el texto */
 }
+
+
+/* Estilo para el texto de bienvenida */
+.login-box p {
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
 
 .login-container h2 {
   margin-bottom: 20px;
   color: #ffffff;
 }
 
+/* Estilo para el botón */
 .login-container button {
   background-color: #c41bd3;
   color: white;
   border: none;
-  padding: 10px 20px;
+  padding: 15px 63px; /* Ajuste del espacio alrededor */
   border-radius: 5px;
-  font-size: 16px;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Sombreado del texto */
-  font-weight: bold; /* Hace el texto en negrita */
-  cursor: pointer;
+  font-size: 18px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+  font-weight: bold;
+  background-image: url('./images/google.png'); /* Icono */
+  background-size: 25px 25px; /* Tamaño del icono */
+  background-repeat: no-repeat;
+  background-position: 18px center; /* Icono alineado verticalmente */
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* Alinea el contenido hacia la izquierda */
+  padding-left: 21%; /* Mueve ligeramente el contenido hacia la derecha */
+  gap: 15px; /* Espacio entre el icono y el texto */
 }
+
 
 .login-container button:hover {
   background-color: #ff7e06;
@@ -523,9 +577,9 @@ footer {
   color: #ffffff; /* Color blanco */
   font-family: 'Cursive', sans-serif; /* Fuente informal */
   text-align: center; /* Centra el texto */
-  line-height: 1.8; /* Espaciado entre líneas */
+  line-height: 1.5; /* Espaciado entre líneas */
   margin: 20px 10px; /* Márgenes para separar del resto */
-  max-width: 800px; /* Ancho máximo */
+  max-width: 600px; /* Ancho máximo */
   word-wrap: break-word; /* Ajusta el texto dentro del ancho */
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Sombreado del texto */
   font-weight: bold; /* Hace el texto en negrita */
